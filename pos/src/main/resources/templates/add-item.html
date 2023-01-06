@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Add Item</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+	integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+	crossorigin="anonymous">
+	<html xmlns:th="http://www.thymeleaf.org">
+<!-- <link rel="stylesheet" href="../css/shards.min.css"> -->
+</head>
+<body style="background-color:#d9d9d9">
+
+	<div class="container my-5">
+	
+	<h3> Add Item</h3>
+		<div class="card">
+			<div class="card-body">
+				<div class="col-md-10">
+				
+					<form action="#" th:action="@{/items/add}"
+						th:object="${item}" method="post">
+						<div class="row">
+							<div class="form-group col-md-8">
+								<label for="name" class="col-form-label">Name</label> <input
+									type="text" th:field="*{name}" class="form-control" id="name"
+									placeholder="Name"> <span
+									th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+									class="text-danger" id="duplicate"></span>
+							</div>
+							<div class="form-group col-md-8">
+								<label for="desc" class="col-form-label">Description</label> <input
+									type="text" th:field="*{desc}" class="form-control" id="desc"
+									placeholder="Description"> <span
+									th:if="${#fields.hasErrors('desc')}" th:errors="*{desc}"
+									class="text-danger" ></span>
+							</div>
+							
+							<div class="form-group col-md-8">
+								<label for="category" class="col-form-label">Category</label> 
+									<select th:field="*{category}" class="form-control" id="category">
+										<option value="Main Course">Main Course</option>
+										<option value="Dessert">Dessert</option>
+										<option value="Beverage">Beverage</option>
+										<option value="Other">Other</option>
+									</select>
+									<span th:if="${#fields.hasErrors('category')}" th:errors="*{category}"
+									class="text-danger" ></span>
+							</div>
+
+							<div class="form-group col-md-8">
+								<label for="price" class="col-form-label">Price (MYR)</label> <input
+									type="number" th:field="*{price}" class="form-control"
+									id="price" value="0.00" step="0.01" min="0.01"> <span
+									th:if="${#fields.hasErrors('price')}" th:errors="*{price}"
+									class="text-danger"></span>
+							</div>
+
+							<div class="col-md-6">
+						<a href="/items/list" class="btn btn-primary"><i
+							class="fas fa-arrow-left">  Back</i></a>
+								<input type="submit" class="btn btn-primary" value="Add Item">
+							</div>
+
+							<div class="form-group col-md-8"></div>
+
+						</div>
+						<!-- <script th:inline="javascript">
+						
+							function validate(){
+								var items = /*[[${items}]]*/ [];
+								let name = document.getElementById("name").value;
+								
+								console.log(name);
+								for(i=0;i<items.length;i++){
+									var item = items[i].name;
+									console.log(item);
+									
+									if(name==item){
+										console.log("duplicate");
+										window.location.href = "/items/add";
+										alert("Duplicated Name");
+										
+									}
+								}
+							}
+							
+							
+							
+							
+							
+						
+						</script> -->
+						
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

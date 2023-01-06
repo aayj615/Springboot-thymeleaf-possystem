@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Checkout</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+	integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+	crossorigin="anonymous">
+<!-- <link rel="stylesheet" href="../css/shards.min.css"> -->
+</head>
+<body style="background-color:#595959">
+	<div class="container my-2">
+		<div class="card">
+			<div class="card-body">
+				<div th:switch="${carts}" class="container my-5">
+					<table class="my-5" style="width:100%">
+						<tr>
+							<td style="width:70%">
+								<a href="/items/viewcart" class="btn btn-primary"><i
+								class="fas fa-arrow-left">  Back</i></a>
+							</td>
+						</tr>
+					</table>
+					
+					<h3>Checkout</h3>
+					<div class="col-md-10">
+						<h2 th:case="null">No Items to Checkout!</h2>
+						<div th:case="*">
+							<table class="table table-striped table-responsive-md">
+								<thead>
+									<tr>
+										<th>No.</th>
+										<th>Name</th>
+										<th>Price</th>
+										<th>Quantity</th>
+										<th>Sub Total</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="cart,state : ${carts}">
+										<td th:text="${state.count}+'.'">a</td>
+										<td th:text="${cart.name}"></td>
+										<td th:text="${cart.getQty()}" id="qty"></td>
+										<td th:text="${cart.price}" id="price"></td>
+										<td th:text="${cart.getSub()}"></td>
+									</tr>
+									<tr>
+										<th colspan="3" style="text-align:right;">Total Amount</th>
+										<td style="text-align:left;width:20%">(<span id="totalQty"></span>) items</td>
+										<td style="width:20%">RM <span id="totalAmount"></span></td>
+									</tr>
+								</tbody>
+							</table>
+							<br>
+
+							<script th:inline="javascript">
+							
+							/*<![CDATA[*/
+							
+							var carts = /*[[${carts}]]*/[];
+							var arrayQ = [];
+							var arrayS = [];
+							var arrayN = [];
+							var arrayP = [];
+							var total = 0.00;
+							//console.log(total);
+							for(var x=0; x<carts.length; x++){
+								var qty = carts[x].qty;
+								var sub = carts[x].sub;
+								var name = carts[x].name;
+								var price = carts[x].price;
+								
+								arrayQ.push(qty);
+								arrayS.push(sub);
+								arrayN.push(name);
+								arrayP.push(price);
+							}
+							
+							var subTotal = arrayS.map(Number);
+							//console.log(subTotal);
+							
+							for(var x=0; x<carts.length; x++){
+								total += subTotal[x];
+								
+							}
+							total = parseFloat(total).toFixed(2);
+							//console.log(total);
+							
+							document.getElementById("totalQty").innerHTML = arrayQ.reduce(getSum, 0);
+							
+							document.getElementById("totalAmount").innerHTML = total;
+							//document.getElementById("totalAmount").innerHTML = arrayS.reduce(roundToTwo);
+							
+							function getSum(total, qty) {
+								return total + Math.round(qty);
+							}
+							
+							function getTotal(total, sub){
+								return total + sub;
+							}
+							
+							console.log(arrayN);
+							console.log(arrayP);
+							console.log(arrayQ);
+							console.log(arrayS);
+							console.log(total);
+
+						
+							</script>
+							
+							
+						</div>
+					</div>
+					
+				</div>
+				<div class="container my-5">
+				<form action="#" th:action="@{/items/savedash}"
+						th:object="${dash}" method="post">
+						Enter table number: <input type="text" th:field="*{tableno}" id="tableno" onchange="gettable()" required>
+						<div style="padding-left:750px;margin-top:-50px">
+						<input type="submit" class="btn btn-primary"  value="Confirm">
+						</div>
+						
+					<div style="opacity:0">
+						<input type="text" th:field="*{itemsname}" id="showname">			
+						<input type="text" th:field="*{price}" id="showprice" >
+						<input type="text" th:field="*{qty}" id="showqty" >
+						<input type="text" th:field="*{sub}" id="showsub" >
+						<input type="text"  th:field="*{total}" id="showtotal" >
+					</div>
+					</form>
+				</div>
+				<script th:inline="javascript">
+				
+				function gettable(){
+					let tableno = document.getElementById("tableno").value;
+					console.log(tableno);
+					sessionStorage.setItem("tableno", tableno);
+				}
+				
+				let cartname = sessionStorage.getItem("cartname");
+				document.getElementById("showname").value = cartname;
+
+				let cartprice = sessionStorage.getItem("cartprice");
+				document.getElementById("showprice").value = cartprice;
+
+				let cartqty = sessionStorage.getItem("cartqty");
+				document.getElementById("showqty").value = cartqty;
+
+				let cartsub = sessionStorage.getItem("cartsub");
+				document.getElementById("showsub").value = cartsub;
+
+				let carttotal = sessionStorage.getItem("carttotal");
+				document.getElementById("showtotal").value = carttotal;
+				
+				</script>
+			
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>
